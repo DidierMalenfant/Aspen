@@ -4,6 +4,8 @@
 
 An easy way to make platform games for the Playdate console. This is a work in progress...
 
+For a very basic example on how to use this, check out [Poke Crossing](https://github.com/DidierMalenfant/Poke-Crossing).
+
 ## License
 
 **Aspen** is distributed under the terms of the [MIT](https://spdx.org/licenses/MIT.html) license.
