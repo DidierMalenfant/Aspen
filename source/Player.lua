@@ -85,8 +85,9 @@ function aspen.Player:goRight()
     self.dx = math.min(max_move_force, self.dx)
 end
 
-function aspen.Player:setJumpSound(sound)
-    self.jump_sound = sound
+function aspen.Player:setJumpSound(sample_path)
+    self.jump_sound = playdate.sound.sampleplayer.new(sample_path)
+    assert(self.jump_sound, 'Error loading jump sound.')    
 end
 
 function aspen.Player:jump()
