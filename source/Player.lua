@@ -10,25 +10,26 @@ local gfx <const> = playdate.graphics
 
 aspen = aspen or {}
 
-class('Player', { image = nil }, aspen).extends(gfx.sprite)
+class('Player', { image = nil }, aspen).extends(AnimatedSprite)
 
-function aspen.Player:init(x, y, image_path)
-    aspen.Player.super.init(self) -- this is critical
+function aspen.Player:init(image_path, states_path, physics)
+    self.image_table = gfx.imagetable.new(image_path)
+    assert(self.image_table, 'Error loading image table from '..image_path..'.')
 
-    self.image = gfx.image.new(image_path)
-    assert(self.image, 'Error creating a new image.')
-
-    self:setImage(self.image)
-    self:setCollideRect(10, 0, self.width - 20, self.height)
-
+    local states = AnimatedSprite.loadStates(states_path)
+    assert(states, 'Error loading states file from '..states_path..'.')
+    
+    -- Call our parent init() method.
+    aspen.Player.super.init(self, self.image_table, states)    
+    self:playAnimation()
+    
     self:setZIndex(10)
     --self:setCenter(0, 0)	-- set center point to center bottom
 
     self.dx = 0.0
     self.dy = 0.0
 
-    self:moveTo(x, y)
-    self:add()
+    self:moveTo(0, 0)
 
     self.jump_sound = nil
 
