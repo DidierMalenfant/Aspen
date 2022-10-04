@@ -15,6 +15,7 @@ aspen = aspen or {}
 class('Level', { level = nil }, aspen).extends(playdate.graphics.sprite)
 
 function aspen.Level:init(pathToLevelJSON)
+	-- Call our parent init() method.
 	aspen.Level.super.init(self)
 
 	self:setZIndex(0)
