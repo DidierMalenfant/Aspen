@@ -8,14 +8,6 @@ import "CoreLibs/object"
 
 local gfx <const> = playdate.graphics
 
-local gravity <const> = 1.2
-local jump_force <const> = 15.0
-local max_fall_speed <const> = 3.0
-local move_force_on_ground <const> = 5.0
-local move_force_in_air <const> = 1.0
-local max_move_force <const> = 5.0
-local lateral_friction <const> = 0.4
-
 aspen = aspen or {}
 
 class('Player', { image = nil }, aspen).extends(gfx.sprite)
@@ -39,12 +31,19 @@ function aspen.Player:init(x, y, image_path)
     self:add()
 
     self.jump_sound = nil
+
+    self.physics = physics
 end
 
 function aspen.Player:update()
-    self.dy += gravity
+    -- Call our parent update() method.
+    aspen.Player.super.update(self)
+
+    local p = self.physics
+
+    self.dy += p.gravity
     if self.dy > 0.0 then
-        self.dy = math.max(self.dy, max_fall_speed)
+        self.dy = math.max(self.dy, p.max_fall_speed)
     end
 
     local wanted_x = self.x + self.dx
@@ -55,9 +54,9 @@ function aspen.Player:update()
     if actual_x ~= wanted_x then
         self.dx = 0.0
     elseif self.dx > 0.0 then
-        self.dx -= math.min(lateral_friction, self.dx)
+        self.dx -= math.min(p.lateral_friction, self.dx)
     elseif self.dx < 0.0 then
-        self.dx -= math.max(-lateral_friction, self.dx)
+        self.dx += math.min(p.lateral_friction, -self.dx)
     end
 
     if actual_y ~= wanted_y then
@@ -66,23 +65,27 @@ function aspen.Player:update()
 end
 
 function aspen.Player:goLeft()
+    local p = self.physics
+    
     if self:isJumping() == true then
-        self.dx -= move_force_in_air
+        self.dx -= p.move_force_in_air
     else
-        self.dx -= move_force_on_ground
+        self.dx -= p.move_force_on_ground
     end
 
-    self.dx = math.max(-max_move_force, self.dx)
+    self.dx = math.max(-p.max_move_force, self.dx)
 end
 
 function aspen.Player:goRight()
+    local p = self.physics
+    
     if self:isJumping() == true then
-        self.dx += move_force_in_air
+        self.dx += p.move_force_in_air
     else
-        self.dx += move_force_on_ground
+        self.dx += p.move_force_on_ground
     end
 
-    self.dx = math.min(max_move_force, self.dx)
+    self.dx = math.min(p.max_move_force, self.dx)
 end
 
 function aspen.Player:setJumpSound(sample_path)
@@ -91,12 +94,14 @@ function aspen.Player:setJumpSound(sample_path)
 end
 
 function aspen.Player:jump()
+    local p = self.physics
+    
     if self:isJumping() ~= true then
         if self.jump_sound then
             self.jump_sound:play()
         end
 
-        self.dy = -jump_force
+        self.dy = -p.jump_force
     end
 end
 
