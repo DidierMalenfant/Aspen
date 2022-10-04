@@ -6,7 +6,15 @@ An easy way to make platform games for the Playdate console.
 
 ‼️ This **toybox** is in active development, the API can change at any time... ‼️
 
-For a very basic example on how to use this, check out [Poke Crossing](https://github.com/DidierMalenfant/Poke-Crossing).
+## Getting started
+
+More documentation coming soon...
+
+For a very basic example on how to use this, check out [**Yap!**](https://github.com/DidierMalenfant/Yap).
+
+#### playdate.update() function
+
+You need to make sure you are calling both `Engine:update()` and `playdate.graphics.sprite.update()` in your `playdate.update()` function.
 
 ## License
 
