@@ -99,10 +99,6 @@ function aspen.Player:jump()
     end
 end
 
-function aspen.Player:turn(angle)
-    self:setRotation(angle)
-end
-
 function aspen.Player:isJumping()
     return self.dy ~= 0.0
 end
