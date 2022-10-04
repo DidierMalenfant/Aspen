@@ -92,7 +92,7 @@ function aspen.Level:setupWallSprites()
 end
 
 
-function aspen.Level:updateCameraPosition(x, y)  -- luacheck: ignore self
+function aspen.Level:updateCameraPosition(x, y)
 	self.camera_x = x
 	self.camera_y = y
 end
