@@ -24,7 +24,6 @@ function aspen.Player:init(image_path, states_path, physics)
     self:playAnimation()
     
     self:setZIndex(10)
-    --self:setCenter(0, 0)	-- set center point to center bottom
 
     self.dx = 0.0
     self.dy = 0.0
