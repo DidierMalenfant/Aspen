@@ -93,7 +93,6 @@ function aspen.Level:setupWallSprites()
 	gfx.sprite.addEmptyCollisionSprite(0, self.level_height + 1, self.level_width, self.level_height + 1)
 end
 
-
 function aspen.Level:updateCameraPosition(x, y)
 	self.camera_x = x
 	self.camera_y = y
