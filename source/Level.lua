@@ -66,14 +66,16 @@ function aspen.Level:setupWallSprites()
 				local gid = tilemap:getTileAtPosition(column, row)
 				if gid and empty_ids[gid] == nil then
 					local cellWidth = self.level.tile_width
-					local w = gfx.sprite.new()
+					local cellHeight = self.level.tile_height
+
+					local w = gfx.sprite.new()					
+					w:setBounds(x, y, cellWidth, cellHeight)
+					w:setCollideRect(0, 0, cellWidth, cellHeight)
 					w:setUpdatesEnabled(false) -- remove from update cycle
 					w:setVisible(false) -- invisible sprites can still collide
-					w:setCenter(0,0)
-					w:setBounds(x, y, cellWidth, self.level.tile_width)
-					w:setCollideRect(0, 0, cellWidth, self.level.tile_height)
 					w:setImageDrawMode(playdate.graphics.kDrawModeCopy)
 					w:addSprite()
+
 					w.gid = gid
 					w.column = column
 					w.row = row
