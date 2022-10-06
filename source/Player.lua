@@ -8,7 +8,7 @@ import "CoreLibs/object"
 
 aspen = aspen or {}
 
-class('Player', { image = nil }, aspen).extends(AnimatedSprite)
+class('Player', { image_table = nil, states = nil, sprite = nil }, aspen).extends()
 
 aspen.Player.State = enum({
     'idle',
@@ -27,23 +27,22 @@ function aspen.Player:init(image_path, states_path, physics)
     assert(states, 'Error loading states file from '..states_path..'.')
     
     -- Call our parent init() method.
-    player.super.init(self, self.image_table, states)    
-    self:playAnimation()
-    
+    self.sprite = AnimatedSprite(self.image_table, states)    
+    self.sprite:playAnimation()
+    self.sprite:setZIndex(10)
+    self.sprite:moveTo(0, 0)
+    self.sprite.collisionResponse = gfx.sprite.kCollisionTypeSlide
     self.state = player.State.idle
     
-    self:setZIndex(10)
-
     self.dx = 0.0
     self.dy = 0.0
-
-    self:moveTo(0, 0)
 
     self.jump_sound = nil
 
     self.physics = physics
     
     Plupdate.iWillBeUsingSprites()
+    Plupdate.addCallback(self.update, self)
 end
 
 function aspen.Player:applyPhysics()
@@ -54,10 +53,10 @@ function aspen.Player:applyPhysics()
         self.dy = math.max(self.dy, p.max_fall_speed)
     end
 
-    local wanted_x = self.x + self.dx
-    local wanted_y = self.y + self.dy
+    local wanted_x = self.sprite.x + self.dx
+    local wanted_y = self.sprite.y + self.dy
 
-    local actual_x, actual_y, _, _ = self:moveWithCollisions(wanted_x, wanted_y)
+    local actual_x, actual_y, _, _ = self.sprite:moveWithCollisions(wanted_x, wanted_y)
 
     if actual_x ~= wanted_x then
         self.dx = 0.0
@@ -73,9 +72,6 @@ function aspen.Player:applyPhysics()
 end
 
 function aspen.Player:update()
-    -- Call our parent update() method.
-    player.super.update(self)
-
     self:applyPhysics()
     
     if self.dy == 0.0 then
@@ -83,6 +79,18 @@ function aspen.Player:update()
     end
 
     pdbase.debug.drawText(player.stateName(self.state), 5, 3)
+end
+
+function aspen.Player:x_pos()
+    return self.sprite.x
+end
+
+function aspen.Player:y_pos()
+    return self.sprite.y
+end
+
+function aspen.Player:moveTo(x, y)
+    self.sprite:moveTo(x,y)
 end
 
 function aspen.Player:goLeft()
@@ -125,10 +133,6 @@ function aspen.Player:jump()
 
         self.state = player.State.jump
     end
-end
-
-function aspen.Player:collisionResponse(other) -- luacheck: ignore self other
-    return gfx.sprite.kCollisionTypeSlide
 end
 
 function aspen.Player.stateName(state)

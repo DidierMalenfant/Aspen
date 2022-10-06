@@ -59,6 +59,6 @@ function aspen.Engine:update()
         self.player:jump()
     end
     
-    self.level:updateCameraPosition(self.player.x - (display_width / 2),
-                                    self.player.y - (display_height / 2) + 20)
+    self.level:updateCameraPosition(self.player:x_pos() - (display_width / 2),
+                                    self.player:y_pos() - (display_height / 2) + 20)
 end
