@@ -39,7 +39,7 @@ function aspen.Level:init(pathToLevelJSON)
 	self.max_x = self.level_width - display_width - self.level.tile_width
 
 	self.camera_x = 0
-	self.camera_Y = 0
+	self.camera_y = 0
 
 	self:setupWallSprites()
 
