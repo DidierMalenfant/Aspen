@@ -19,6 +19,9 @@ class('Engine', { background_image = nil, level = nil, player = nil }, aspen).ex
 function aspen.Engine:init()
     -- Call our parent init() method.
     aspen.Engine.super.init(self)
+    
+    Plupdate.iWillBeUsingSprites()
+    Plupdate.addCallback(self.update, self)
 end
 
 function aspen.Engine:createPlayer(image_table_path, states_path, physics)

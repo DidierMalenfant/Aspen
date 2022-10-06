@@ -44,6 +44,8 @@ function aspen.Level:init(pathToLevelJSON)
 	self:setupWallSprites()
 
 	self:addSprite()
+
+	Plupdate.iWillBeUsingSprites()
 end
 
 function aspen.Level:size()

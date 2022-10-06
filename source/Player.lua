@@ -33,6 +33,8 @@ function aspen.Player:init(image_path, states_path, physics)
     self.jump_sound = nil
 
     self.physics = physics
+    
+    Plupdate.iWillBeUsingSprites()
 end
 
 function aspen.Player:update()

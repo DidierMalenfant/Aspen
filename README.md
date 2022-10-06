@@ -4,6 +4,8 @@
 
 An easy way to make platform games for the Playdate console.
 
+This **toybox** depends on **Plupdate**. Make sure you [read about](https://github.com/DidierMalenfant/Plupdate#changes-in-your-code) what this means for your code and its `playdate.update()` callback.
+
 ‼️ This **toybox** is in active development, the API can change at any time... ‼️
 
 ## Getting started
@@ -11,10 +13,6 @@ An easy way to make platform games for the Playdate console.
 More documentation coming soon...
 
 For a very basic example on how to use this, check out [**Yap!**](https://github.com/DidierMalenfant/Yap).
-
-#### playdate.update() function
-
-You need to make sure you are calling both `Engine:update()` and `playdate.graphics.sprite.update()` in your `playdate.update()` function.
 
 ## License
 
