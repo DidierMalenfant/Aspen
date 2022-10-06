@@ -33,6 +33,7 @@ function aspen.Level:init(pathToLevelJSON)
 		self.level_height = max(self.level_height, layer.pixelHeight)
 	end
 
+	-- This is to make sure our level 'sprite' always gets drawn.
 	self:setBounds(0, 0, self.level_width, self.level_height)
 
 	self.min_x = 0
