@@ -32,6 +32,10 @@ function aspen.Player:init(image_path, states_path, physics)
     self.sprite:setZIndex(10)
     self.sprite:moveTo(0, 0)
     self.sprite.collisionResponse = gfx.sprite.kCollisionTypeSlide
+        
+    -- This will be set based on the sprite animation frames eventually.
+    self.sprite:setCollideRect(64, 30, 20, 59)
+
     self.state = player.State.idle
     
     self.dx = 0.0
