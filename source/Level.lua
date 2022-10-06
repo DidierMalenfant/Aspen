@@ -112,6 +112,7 @@ function aspen.Level:update()
 	self.camera_y = min(self.camera_y, self.level_height - display_height)
 
 	gfx.setDrawOffset(-self.camera_x, -self.camera_y)
+	pdbase.debug.drawText(tostring(-self.camera_x)..' '..tostring(-self.camera_y), 5, 20)
 end
 
 function aspen.Level:draw(_x, _y, _width, _height)

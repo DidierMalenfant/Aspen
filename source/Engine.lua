@@ -20,6 +20,8 @@ function aspen.Engine:init()
     -- Call our parent init() method.
     aspen.Engine.super.init(self)
     
+    FontSample.setFont()
+    
     Plupdate.iWillBeUsingSprites()
     Plupdate.addCallback(self.update, self)
 end

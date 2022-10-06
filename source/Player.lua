@@ -81,6 +81,8 @@ function aspen.Player:update()
     if self.dy == 0.0 then
         self.state = player.State.idle
     end
+
+    pdbase.debug.drawText(player.stateName(self.state), 5, 3)
 end
 
 function aspen.Player:goLeft()
