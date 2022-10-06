@@ -6,11 +6,18 @@ import "CoreLibs/graphics"
 import "CoreLibs/sprites"
 import "CoreLibs/object"
 
-local gfx <const> = playdate.graphics
-
 aspen = aspen or {}
 
 class('Player', { image = nil }, aspen).extends(AnimatedSprite)
+
+aspen.Player.State = enum({
+    'idle',
+    'walk',
+    'jump'
+})
+
+local gfx <const> = playdate.graphics
+local player <const> = aspen.Player
 
 function aspen.Player:init(image_path, states_path, physics)
     self.image_table = gfx.imagetable.new(image_path)
@@ -20,8 +27,10 @@ function aspen.Player:init(image_path, states_path, physics)
     assert(states, 'Error loading states file from '..states_path..'.')
     
     -- Call our parent init() method.
-    aspen.Player.super.init(self, self.image_table, states)    
+    player.super.init(self, self.image_table, states)    
     self:playAnimation()
+    
+    self.state = player.State.idle
     
     self:setZIndex(10)
 
@@ -37,10 +46,7 @@ function aspen.Player:init(image_path, states_path, physics)
     Plupdate.iWillBeUsingSprites()
 end
 
-function aspen.Player:update()
-    -- Call our parent update() method.
-    aspen.Player.super.update(self)
-
+function aspen.Player:applyPhysics()
     local p = self.physics
 
     self.dy += p.gravity
@@ -66,10 +72,21 @@ function aspen.Player:update()
     end
 end
 
+function aspen.Player:update()
+    -- Call our parent update() method.
+    player.super.update(self)
+
+    self:applyPhysics()
+    
+    if self.dy == 0.0 then
+        self.state = player.State.idle
+    end
+end
+
 function aspen.Player:goLeft()
     local p = self.physics
     
-    if self:isJumping() == true then
+    if self.state == player.State.jump then
         self.dx -= p.move_force_in_air
     else
         self.dx -= p.move_force_on_ground
@@ -81,7 +98,7 @@ end
 function aspen.Player:goRight()
     local p = self.physics
     
-    if self:isJumping() == true then
+    if self.state == player.State.jump then
         self.dx += p.move_force_in_air
     else
         self.dx += p.move_force_on_ground
@@ -96,21 +113,28 @@ function aspen.Player:setJumpSound(sample_path)
 end
 
 function aspen.Player:jump()
-    local p = self.physics
-    
-    if self:isJumping() ~= true then
+    if self.state ~= player.State.jump then
         if self.jump_sound then
             self.jump_sound:play()
         end
 
+        local p = self.physics            
         self.dy = -p.jump_force
-    end
-end
 
-function aspen.Player:isJumping()
-    return self.dy ~= 0.0
+        self.state = player.State.jump
+    end
 end
 
 function aspen.Player:collisionResponse(other) -- luacheck: ignore self other
     return gfx.sprite.kCollisionTypeSlide
+end
+
+function aspen.Player.stateName(state)
+    local state_names = {
+        'idle',
+        'walk',
+        'jump'
+    }
+
+    return state_names[state]
 end
