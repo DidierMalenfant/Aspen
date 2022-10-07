@@ -20,13 +20,15 @@ local gfx <const> = playdate.graphics
 local player <const> = aspen.Player
 
 function aspen.Player:init(image_path, states_path, physics)
+    -- Call our parent init() method.
+    aspen.Player.super.init(self)
+
     self.image_table = gfx.imagetable.new(image_path)
     assert(self.image_table, 'Error loading image table from '..image_path..'.')
 
     local states = AnimatedSprite.loadStates(states_path)
     assert(states, 'Error loading states file from '..states_path..'.')
     
-    -- Call our parent init() method.
     self.sprite = AnimatedSprite(self.image_table, states)    
     self.sprite:playAnimation()
     self.sprite:setZIndex(10)
