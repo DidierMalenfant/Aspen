@@ -107,7 +107,6 @@ end
 function aspen.Level:update()
 	-- TODO: dynamically load and unload collision sprites as the player moves around the level
 	gfx.setDrawOffset(-self.camera_x, -self.camera_y)
-	pdbase.debug.drawText(tostring(-self.camera_x)..' '..tostring(-self.camera_y), 5, 20)
 end
 
 function aspen.Level:draw(_x, _y, _width, _height)
