@@ -60,6 +60,10 @@ function aspen.Player:init(image_path, states_path, physics)
     
     Plupdate.iWillBeUsingSprites()
     Plupdate.addCallback(self.update, self)
+    Plupdate.addPostCallback(function()
+        pdbase.debug.drawText(player.stateName(self.state), 5, 3)
+        pdbase.debug.drawText(self.sprite.currentState, 5, 15)
+    end)
 end
 
 function aspen.Player.stateName(state)
@@ -177,8 +181,6 @@ function aspen.Player:update()
     elseif self.state == player.State.jumping then
         self:jumping()
     end
-
-    pdbase.debug.drawText(player.stateName(self.state), 5, 3)
 end
 
 function aspen.Player:idle()
