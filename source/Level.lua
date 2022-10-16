@@ -7,7 +7,7 @@ import 'CoreLibs/sprites'
 import 'CoreLibs/object'
 
 local gfx <const> = playdate.graphics
-local min <const>, max <const> =  math.min, math.max
+local max <const> =  math.max
 
 local display_width <const>, display_height <const> = playdate.display.getSize()
 
@@ -69,7 +69,7 @@ function aspen.Level:setupWallSprites()
 					local cellWidth = self.level.tile_width
 					local cellHeight = self.level.tile_height
 
-					local w = gfx.sprite.new()					
+					local w = gfx.sprite.new()
 					w:setBounds(x, y, cellWidth, cellHeight)
 					w:setCollideRect(0, 0, cellWidth, cellHeight)
 					w:setUpdatesEnabled(false) -- remove from update cycle

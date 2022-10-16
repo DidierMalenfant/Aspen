@@ -28,36 +28,36 @@ function aspen.Player:init(image_path, states_path, physics)
 
     local states = AnimatedSprite.loadStates(states_path)
     assert(states, 'Error loading states file from '..states_path..'.')
-    
-    self.sprite = AnimatedSprite(self.image_table, states)    
+
+    self.sprite = AnimatedSprite(self.image_table, states)
     self.sprite:playAnimation()
     self.sprite:setZIndex(10)
-    self.sprite.collisionResponse = gfx.sprite.kCollisionTypeSlide        
+    self.sprite.collisionResponse = gfx.sprite.kCollisionTypeSlide
 
     -- This will be set based on the sprite animation frames eventually.
     self.sprite:setCollideRect(64, 30, 20, 59)
 
     self.level_height = playdate.display.getSize()
-        
+
     self.state = player.State.idle
 
     self.x = 0.0
     self.y = 0.0
-    
+
     self.dx = 0.0
     self.dy = 0.0
-    
+
     self.direction = 1
     self.previous_direction = 1
 
     self.jump_sound = nil
 
     self.physics = physics
-    
+
     self.player_moved_callback = nil
-    
+
     self:goIdle()
-    
+
     Plupdate.iWillBeUsingSprites()
     Plupdate.addCallback(self.update, self)
     Plupdate.addPostCallback(function()
@@ -86,27 +86,27 @@ end
 
 function aspen.Player:setJumpSound(sample_path)
     self.jump_sound = playdate.sound.sampleplayer.new(sample_path)
-    assert(self.jump_sound, 'Error loading jump sound.')    
+    assert(self.jump_sound, 'Error loading jump sound.')
 end
 
 function aspen.Player:setPlayerMovedCallback(callback)
-    self.player_moved_callback = callback    
+    self.player_moved_callback = callback
 end
 
 function aspen.Player:setPos(x, y)
     self.sprite:moveTo(x, self.level_height - y)
-    
+
     self:moveTo(x, y)
 end
 
-function aspen.Player:moveTo(x, y)    
+function aspen.Player:moveTo(x, y)
     if self.x == x and self.y == y then
         return
     end
 
     self.x = x
     self.y = y
-    
+
     if self.player_moved_callback ~= nil then
         self.player_moved_callback(x, y)
     end
@@ -127,7 +127,7 @@ function aspen.Player:goJump()
         self.jump_sound:play()
     end
 
-    local p = self.physics            
+    local p = self.physics
     self.dy = p.jump_force
 
     self.state = player.State.jumping
@@ -158,7 +158,7 @@ function aspen.Player:applyPhysics()
 
     local wanted_x = self.x + self.dx
     local wanted_y = self.level_height - (self.y + self.dy)
-    
+
     local actual_x, actual_y, _, _ = self.sprite:moveWithCollisions(wanted_x, wanted_y)
     self:moveTo(actual_x, self.level_height - actual_y)
 
@@ -168,7 +168,7 @@ function aspen.Player:applyPhysics()
 
     if actual_y ~= wanted_y then
         self.dy = 0.0
-    else        
+    else
         self.dy = math.max(self.dy - p.gravity, -p.max_fall_speed)
     end
 end
@@ -195,7 +195,7 @@ function aspen.Player:idle()
     if playdate.buttonIsPressed(playdate.kButtonA) then
         self:goJump()
     end
-    
+
     self:applyPhysics()
 
     if self.dx ~= 0.0 then
@@ -217,13 +217,13 @@ function aspen.Player:walking()
         self:lateralPush(self.direction, -math.min(p.lateral_friction, (self.direction * self.dx)))
         stopping = true
     end
-    
+
     if playdate.buttonIsPressed(playdate.kButtonA) then
         self:goJump()
     end
-    
+
     self:applyPhysics()
-    
+
     if self.dx == 0.0 then
         if stopping then
             self:goIdle()
@@ -247,9 +247,9 @@ function aspen.Player:jumping()
     elseif playdate.buttonIsPressed(playdate.kButtonLeft) then
         self:lateralPush(-1, p.move_force_in_air)
     end
-    
+
     self:applyPhysics()
-    
+
     if self.dy == 0.0 then
         if self.dx == 0.0 then
             self:goIdle()

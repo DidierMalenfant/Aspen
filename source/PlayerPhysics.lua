@@ -2,8 +2,6 @@
 --
 -- SPDX-License-Identifier: MIT
 
-local gfx <const> = playdate.graphics
-
 aspen = aspen or {}
 
 class('PlayerPhysics', { }, aspen).extends()
@@ -18,5 +16,5 @@ function aspen.PlayerPhysics:init()
     self.move_force_on_ground = 1.5
     self.move_force_in_air = 1.0
     self.max_move_force = 5.0
-    self.lateral_friction = 0.4    
+    self.lateral_friction = 0.4
 end
