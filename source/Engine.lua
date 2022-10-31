@@ -8,24 +8,29 @@ import "CoreLibs/object"
 import 'Level'
 import 'Player'
 
+dm = dm or {}
+dm.aspen = dm.aspen or {}
+
+class('Engine', { background_image = nil, level = nil, player = nil, camera_y_offset = 0 }, dm.aspen).extends()
+
 local gfx <const> = playdate.graphics
+local aspen <const> = dm.aspen
+local Engine <const> = dm.aspen.Engine
+local Plupdate <const> = dm.Plupdate
+local FontSample <const> = dm.FontSample
 
 local display_width <const>, display_height <const> = playdate.display.getSize()
 
-aspen = aspen or {}
-
-class('Engine', { background_image = nil, level = nil, player = nil, camera_y_offset = 0 }, aspen).extends()
-
-function aspen.Engine:init()
+function Engine:init()
     -- Call our parent init() method.
-    aspen.Engine.super.init(self)
+    Engine.super.init(self)
 
     FontSample.setFont()
 
     Plupdate.iWillBeUsingSprites()
 end
 
-function aspen.Engine:createPlayer(image_table_path, states_path, physics)
+function Engine:createPlayer(image_table_path, states_path, physics)
     self.player = aspen.Player(image_table_path, states_path, physics)
     assert(self.player, 'Error loading character.')
 
@@ -41,12 +46,12 @@ function aspen.Engine:createPlayer(image_table_path, states_path, physics)
     end)
 end
 
-function aspen.Engine:loadLevel(level_path)
+function Engine:loadLevel(level_path)
     self.level = aspen.Level(level_path)
     assert(self.level, 'Error loading level.')
 end
 
-function aspen.Engine:setBackgroundImage(image_path)
+function Engine:setBackgroundImage(image_path)
     self.background_image = gfx.image.new(image_path)
     assert(self.background_image, 'Error loading background image.')
 
@@ -58,6 +63,6 @@ function aspen.Engine:setBackgroundImage(image_path)
     end)
 end
 
-function aspen.Engine:setCameraYOffset(offset)
+function Engine:setCameraYOffset(offset)
     self.camera_y_offset = offset
 end

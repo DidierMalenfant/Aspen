@@ -2,13 +2,18 @@
 --
 -- SPDX-License-Identifier: MIT
 
-aspen = aspen or {}
+import "CoreLibs/object"
 
-class('PlayerPhysics', { }, aspen).extends()
+dm = dm or {}
+dm.aspen = dm.aspen or {}
 
-function aspen.PlayerPhysics:init()
+class('PlayerPhysics', { }, dm.aspen).extends()
+
+local PlayerPhysics <const> = dm.aspen.PlayerPhysics
+
+function PlayerPhysics:init()
     -- Call our parent init() method.
-    aspen.PlayerPhysics.super.init(self)
+    PlayerPhysics.super.init(self)
 
     self.gravity = 1.3
     self.jump_force = 14.0

@@ -6,22 +6,26 @@ import "CoreLibs/graphics"
 import "CoreLibs/sprites"
 import "CoreLibs/object"
 
-aspen = aspen or {}
+dm = dm or {}
+dm.aspen = dm.aspen or {}
 
-class('Player', { image_table = nil, states = nil, sprite = nil, direction = 0 }, aspen).extends()
+class('Player', { image_table = nil, states = nil, sprite = nil, direction = 0 }, dm.aspen).extends()
 
-aspen.Player.State = enum({
+local Player <const> = dm.aspen.Player
+local Plupdate <const> = dm.Plupdate
+local debug <const> = dm.debug
+local clamp <const> =  dm.math.clamp
+local gfx <const> = playdate.graphics
+
+Player.State = dm.enum({
     'idle',
     'walking',
     'jumping'
 })
 
-local gfx <const> = playdate.graphics
-local player <const> = aspen.Player
-
-function aspen.Player:init(image_path, states_path, physics)
+function Player:init(image_path, states_path, physics)
     -- Call our parent init() method.
-    aspen.Player.super.init(self)
+    Player.super.init(self)
 
     self.image_table = gfx.imagetable.new(image_path)
     assert(self.image_table, 'Error loading image table from '..image_path..'.')
@@ -39,7 +43,7 @@ function aspen.Player:init(image_path, states_path, physics)
 
     self.level_height = playdate.display.getSize()
 
-    self.state = player.State.idle
+    self.state = Player.State.idle
 
     self.x = 0.0
     self.y = 0.0
@@ -61,12 +65,12 @@ function aspen.Player:init(image_path, states_path, physics)
     Plupdate.iWillBeUsingSprites()
     Plupdate.addCallback(self.update, self)
     Plupdate.addPostCallback(function()
-        pdbase.debug.drawText(player.stateName(self.state), 5, 3)
-        pdbase.debug.drawText(self.sprite.currentState, 5, 15)
+        debug.drawText(Player.stateName(self.state), 5, 3)
+        debug.drawText(self.sprite.currentState, 5, 15)
     end)
 end
 
-function aspen.Player.stateName(state)
+function Player.stateName(state)
     local state_names = {
         'idle',
         'walk',
@@ -76,30 +80,30 @@ function aspen.Player.stateName(state)
     return state_names[state]
 end
 
-function aspen.Player:setCenter(x, y)
+function Player:setCenter(x, y)
     self.sprite:setCenter(x / self.sprite.width, y / self.sprite.height)
 end
 
-function aspen.Player:setCollideRect(x, y, w, h)
+function Player:setCollideRect(x, y, w, h)
     self.sprite:setCollideRect(x, y, w, h)
 end
 
-function aspen.Player:setJumpSound(sample_path)
+function Player:setJumpSound(sample_path)
     self.jump_sound = playdate.sound.sampleplayer.new(sample_path)
     assert(self.jump_sound, 'Error loading jump sound.')
 end
 
-function aspen.Player:setPlayerMovedCallback(callback)
+function Player:setPlayerMovedCallback(callback)
     self.player_moved_callback = callback
 end
 
-function aspen.Player:setPos(x, y)
+function Player:setPos(x, y)
     self.sprite:moveTo(x, self.level_height - y)
 
     self:moveTo(x, y)
 end
 
-function aspen.Player:moveTo(x, y)
+function Player:moveTo(x, y)
     if self.x == x and self.y == y then
         return
     end
@@ -112,17 +116,17 @@ function aspen.Player:moveTo(x, y)
     end
 end
 
-function aspen.Player:lateralPush(direction, force)
+function Player:lateralPush(direction, force)
     if direction ~= self.direction then
         self.previous_direction = self.direction
         self.direction = direction
     end
 
     local max = self.physics.max_move_force
-    self.dx = math.clamp(self.dx + (direction * force), -max, max)
+    self.dx = clamp(self.dx + (direction * force), -max, max)
 end
 
-function aspen.Player:goJump()
+function Player:goJump()
     if self.jump_sound then
         self.jump_sound:play()
     end
@@ -130,30 +134,30 @@ function aspen.Player:goJump()
     local p = self.physics
     self.dy = p.jump_force
 
-    self.state = player.State.jumping
+    self.state = Player.State.jumping
 end
 
-function aspen.Player:goIdle()
+function Player:goIdle()
     if self.direction > 0 then
         self.sprite:changeState('walkrightstop')
     else
         self.sprite:changeState('walkleftstop')
     end
 
-    self.state = player.State.idle
+    self.state = Player.State.idle
 end
 
-function aspen.Player:goWalking()
+function Player:goWalking()
     if self.direction > 0 then
         self.sprite:changeState('walkrightstart')
     else
         self.sprite:changeState('walkleftstart')
     end
 
-    self.state = player.State.walking
+    self.state = Player.State.walking
 end
 
-function aspen.Player:applyPhysics()
+function Player:applyPhysics()
     local p = self.physics
 
     local wanted_x = self.x + self.dx
@@ -173,17 +177,17 @@ function aspen.Player:applyPhysics()
     end
 end
 
-function aspen.Player:update()
-    if self.state == player.State.idle then
+function Player:update()
+    if self.state == Player.State.idle then
         self:idle()
-    elseif self.state == player.State.walking then
+    elseif self.state == Player.State.walking then
         self:walking()
-    elseif self.state == player.State.jumping then
+    elseif self.state == Player.State.jumping then
         self:jumping()
     end
 end
 
-function aspen.Player:idle()
+function Player:idle()
     local p = self.physics
 
     if playdate.buttonIsPressed(playdate.kButtonRight) then
@@ -204,7 +208,7 @@ function aspen.Player:idle()
     end
 end
 
-function aspen.Player:walking()
+function Player:walking()
     local p = self.physics
 
     local stopping = false
@@ -239,7 +243,7 @@ function aspen.Player:walking()
     end
 end
 
-function aspen.Player:jumping()
+function Player:jumping()
     local p = self.physics
 
     if playdate.buttonIsPressed(playdate.kButtonRight) then

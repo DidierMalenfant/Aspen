@@ -10,86 +10,90 @@
 
 return {
     globals = {
-        aspen = {
+        dm = {
             fields = {
-                Engine = {
+                aspen = {
                     fields = {
-                        super = {
+                        Engine = {
                             fields = {
+                                super = {
+                                    fields = {
+                                        className = {},
+                                        init = {}
+                                    }
+                                },
                                 className = {},
-                                init = {}
+                                init = {},
+                                createPlayer = {},
+                                loadLevel = {},
+                                setBackgroundImage = {},
+                                setCameraYOffset = {}
                             }
                         },
-                        className = {},
-                        init = {},
-                        createPlayer = {},
-                        loadLevel = {},
-                        setBackgroundImage = {},
-                        setCameraYOffset = {}
-                    }
-                },
-                Level= {
-                    fields = {
-                        super = {
+                        Level= {
                             fields = {
+                                super = {
+                                    fields = {
+                                        className = {},
+                                        init = {}
+                                    }
+                                },
                                 className = {},
-                                init = {}
+                                init = {},
+                                size = {},
+                                setupWallSprites = {},
+                                updateCameraPosition = {},
+                                update = {},
+                                draw = {}
                             }
                         },
-                        className = {},
-                        init = {},
-                        size = {},
-                        setupWallSprites = {},
-                        updateCameraPosition = {},
-                        update = {},
-                        draw = {}
-                    }
-                },
-                Player = {
-                    fields = {
-                        super = {
+                        Player = {
                             fields = {
+                                super = {
+                                    fields = {
+                                        className = {},
+                                        init = {}
+                                    }
+                                },
                                 className = {},
-                                init = {}
-                            }
-                        },
-                        className = {},
-                        init = {},
-                        State = {
-                            fields = {
+                                init = {},
+                                State = {
+                                    fields = {
+                                        idle = {},
+                                        walking = {},
+                                        jumping = {}
+                                    }
+                                },
+                                stateName = {},
+                                setCenter = {},
+                                setCollideRect = {},
+                                setJumpSound = {},
+                                setPlayerMovedCallback = {},
+                                setPos = {},
+                                moveTo = {},
+                                lateralPush = {},
+                                goJump = {},
+                                goIdle = {},
+                                goWalking = {},
+                                applyPhysics = {},
+                                update = {},
                                 idle = {},
                                 walking = {},
                                 jumping = {}
                             }
                         },
-                        stateName = {},
-                        setCenter = {},
-                        setCollideRect = {},
-                        setJumpSound = {},
-                        setPlayerMovedCallback = {},
-                        setPos = {},
-                        moveTo = {},
-                        lateralPush = {},
-                        goJump = {},
-                        goIdle = {},
-                        goWalking = {},
-                        applyPhysics = {},
-                        update = {},
-                        idle = {},
-                        walking = {},
-                        jumping = {}
-                    }
-                },
-                PlayerPhysics = {
-                    fields = {
-                        super = {
+                        PlayerPhysics = {
                             fields = {
+                                super = {
+                                    fields = {
+                                        className = {},
+                                        init = {}
+                                    }
+                                },
                                 className = {},
                                 init = {}
                             }
-                        },
-                        className = {},
-                        init = {}
+                        }
                     }
                 }
             }

@@ -6,18 +6,23 @@ import "CoreLibs/graphics"
 import 'CoreLibs/sprites'
 import 'CoreLibs/object'
 
+dm = dm or {}
+dm.aspen = dm.aspen or {}
+
+class('Level', { level = nil }, dm.aspen).extends(playdate.graphics.sprite)
+
+local Level <const> = dm.aspen.Level
+local tiledup <const> = dm.tiledup
 local gfx <const> = playdate.graphics
+local Plupdate <const> = dm.Plupdate
 local max <const> =  math.max
+local clamp <const> =  dm.math.clamp
 
 local display_width <const>, display_height <const> = playdate.display.getSize()
 
-aspen = aspen or {}
-
-class('Level', { level = nil }, aspen).extends(playdate.graphics.sprite)
-
-function aspen.Level:init(pathToLevelJSON)
+function Level:init(pathToLevelJSON)
 	-- Call our parent init() method.
-	aspen.Level.super.init(self)
+	Level.super.init(self)
 
 	self:setZIndex(0)
 	self:setCenter(0, 0)	-- set center point to center bottom
@@ -49,11 +54,11 @@ function aspen.Level:init(pathToLevelJSON)
 	Plupdate.iWillBeUsingSprites()
 end
 
-function aspen.Level:size()
+function Level:size()
 	return self.width, self.height
 end
 
-function aspen.Level:setupWallSprites()
+function Level:setupWallSprites()
 	for _, layer in pairs(self.level.layers) do
 		local tilemap = layer.tilemap
 		local empty_ids = layer.empty_ids
@@ -99,17 +104,17 @@ function aspen.Level:setupWallSprites()
 	gfx.sprite.addEmptyCollisionSprite(-1, -1, self.width, -1)
 end
 
-function aspen.Level:updateCameraPosition(x, y)
-	self.camera_x = math.clamp(x, 0, self.width - display_width)
-	self.camera_y = math.clamp(self.height - y, 0, self.height - display_height)
+function Level:updateCameraPosition(x, y)
+	self.camera_x = clamp(x, 0, self.width - display_width)
+	self.camera_y = clamp(self.height - y, 0, self.height - display_height)
 end
 
-function aspen.Level:update()
+function Level:update()
 	-- TODO: dynamically load and unload collision sprites as the player moves around the level
 	gfx.setDrawOffset(-self.camera_x, -self.camera_y)
 end
 
-function aspen.Level:draw(_x, _y, _width, _height)
+function Level:draw(_x, _y, _width, _height)
 	for _, layer in pairs(self.level.layers) do
 		layer.tilemap:draw(0, 0)
 	end
